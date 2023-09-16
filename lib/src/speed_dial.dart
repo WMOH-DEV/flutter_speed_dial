@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'animated_child.dart';
+import 'global_key_extension.dart';
 import 'animated_floating_button.dart';
 import 'background_overlay.dart';
 import 'speed_dial_child.dart';
@@ -130,10 +131,10 @@ class SpeedDial extends StatefulWidget {
   final Duration animationDuration;
 
   /// The margin of each child
-  final EdgeInsets childMargin;
+  final EdgeInsetsGeometry childMargin;
 
   /// The padding of each child
-  final EdgeInsets childPadding;
+  final EdgeInsetsGeometry childPadding;
 
   /// Add a space at between speed dial and children
   final double? spacing;
@@ -356,8 +357,8 @@ class _SpeedDialState extends State<SpeedDial>
       if (!mounted) return;
 
       _controller.forward();
-      if (widget.renderOverlay) Overlay.of(context).insert(backgroundOverlay!);
-      Overlay.of(context).insert(overlayEntry!);
+      if (widget.renderOverlay) Overlay.of(context)!.insert(backgroundOverlay!);
+      Overlay.of(context)!.insert(overlayEntry!);
     }
 
     if (!mounted) return;
@@ -624,6 +625,13 @@ class _ChildrensOverlay extends StatelessWidget {
                               ? 0
                               : dialKey.globalPaintBounds!.size.width) +
                           max(widget.childrenButtonSize.width - 56, 0) / 2)
+                  // ? Offset(
+                  //     (widget.switchLabelPosition ||
+                  //                 dialKey.globalPaintBounds == null
+                  //             ? 0
+                  //             : dialKey.globalPaintBounds!.size.width) +
+                  //         max(widget.childrenButtonSize.width - 56, 0) / 2,
+                  //     0)
                   : widget.direction.isLeft
                       ? Offset(
                           -10.0,
@@ -634,7 +642,7 @@ class _ChildrensOverlay extends StatelessWidget {
                               dialKey.globalPaintBounds != null
                           ? Offset(dialKey.globalPaintBounds!.size.width + 12,
                               dialKey.globalPaintBounds!.size.height / 2)
-                          : const Offset(-10.0, 0.0),
+                          : const Offset(-10.0, 0),
           link: layerLink,
           showWhenUnlinked: false,
           child: Material(
